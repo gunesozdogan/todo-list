@@ -1,0 +1,157 @@
+:root {
+    font-size: 10px;
+    --main-color-dark: #5cdb95;
+    --main-color-medium: #8ee4af;
+    --main-color-light: #edf5e1;
+    --sec-color: #05386b;
+}
+
+/* 
+COLORS FROM DARK TO LIGHT
+#05386B
+#379683
+#5CDB95
+#8EE4AF
+#EDF5E1
+
+*/
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Open sans", sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+    position: relative;
+    min-height: 100vh;
+    width: 100vw;
+}
+
+/* HEADER */
+/*  */
+header {
+    height: 12vh;
+    width: 100vw;
+    background: linear-gradient(
+        to bottom,
+        var(--main-color-dark),
+        var(--main-color-medium)
+    );
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    padding: 2rem;
+}
+
+h1 {
+    color: var(--sec-color);
+    font-size: 5rem;
+    letter-spacing: -0.3rem;
+}
+
+/* SIDEBAR */
+/*  */
+main {
+    display: flex;
+    height: calc(100vh - 12vh);
+}
+
+.sidebar {
+    width: 15vw;
+    min-width: 20rem;
+    display: flex;
+    flex-direction: column;
+    border-radius: 50%;
+}
+
+.upper-side {
+    width: 100%;
+    background-color: var(--sec-color);
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-items: center;
+    padding: 2rem;
+    flex: 1;
+}
+
+.upper-side-btn,
+.lower-side-btn {
+    display: flex;
+    gap: 1rem;
+    cursor: pointer;
+    width: 100%;
+    padding: 1em;
+    background-color: var(--sec-color);
+    border: none;
+    color: #fff;
+    font-size: 1.7rem;
+    font-weight: lighter;
+}
+
+.upper-side-btn:hover,
+.lower-side-btn:hover {
+    background-color: #0e4f91;
+}
+
+.lower-side {
+    flex: 4;
+    background-color: var(--sec-color);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-items: center;
+    font-size: 2rem;
+    font-weight: lighter;
+    gap: 1rem;
+    padding: 2rem;
+    cursor: pointer;
+    width: 100%;
+    padding-top: 1rem;
+    border-top: solid 2px var(--main-color-dark);
+}
+
+svg {
+    fill: #fff;
+    justify-self: end;
+}
+
+.main-content {
+    background-color: #eee;
+    flex: 1;
+}
+/* FOOTER */
+/*  */
+footer {
+    margin-top: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+    height: 4%;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+
+footer p {
+    color: #fff;
+    font-size: 1.5rem;
+}
+
+.github-link:link,
+.github-link:visited {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 0.5rem;
+}
+
+.github-link:active,
+.github-link:hover {
+    color: #eee;
+    transform: rotate(20deg);
+}
