@@ -23,8 +23,11 @@
         "webpack-cli": "^4.10.0"
     },
     "eslintConfig": {
+        "parser": "babel-eslint",
         "parserOptions": {
-            "ecmaVersion": "latest"
+            "sourceType": "module",
+            "ecmaVersion": "latest",
+            "allowImportExportEverywhere": true
         },
         "env": {
             "es6": true
@@ -32,5 +35,12 @@
         "extends": [
             "prettier"
         ]
+    },
+    "prettier": {
+        "singleQuote": true,
+        "tabWidth": 4
+    },
+    "dependencies": {
+        "date-fns": "^2.29.1"
     }
 }
