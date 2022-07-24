@@ -1,3 +1,5 @@
+export default loadInboxPage;
+
 import UI from './UI';
 
 const inbox = document.querySelector('.inbox');

@@ -1,3 +1,5 @@
+export default loadTodayPage;
+
 import UI from './UI';
 
 const today = document.querySelector('.today');

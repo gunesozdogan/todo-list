@@ -1,5 +1,5 @@
 import Task from '../todo';
-import { format, compareAsc } from 'date-fns';
+import { compareAsc } from 'date-fns';
 
 const UI = (function UI() {
     const allTasks = [];

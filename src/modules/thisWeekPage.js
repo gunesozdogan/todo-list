@@ -1,3 +1,5 @@
+export default loadThisWeekPage;
+
 import UI from './UI';
 
 const thisWeek = document.querySelector('.this-week');

@@ -66,7 +66,7 @@ main {
 
 .sidebar {
     width: 15vw;
-    min-width: 20rem;
+    min-width: 25rem;
     display: flex;
     flex-direction: column;
     border-radius: 50%;
@@ -84,7 +84,8 @@ main {
 }
 
 .upper-side-btn,
-.lower-side-btn {
+.my-projects,
+.add-project {
     display: flex;
     gap: 1rem;
     cursor: pointer;
@@ -93,12 +94,13 @@ main {
     background-color: var(--sec-color);
     border: none;
     color: #fff;
-    font-size: 1.7rem;
+    font-size: 1.5rem;
     font-weight: lighter;
 }
 
 .upper-side-btn:hover,
-.lower-side-btn:hover {
+.lower-side-btn:hover,
+.add-project:hover {
     background-color: #0e4f91;
 }
 
@@ -114,10 +116,110 @@ main {
     font-weight: lighter;
     gap: 1rem;
     padding: 2rem;
-    cursor: pointer;
     width: 100%;
     padding-top: 1rem;
     border-top: solid 2px var(--main-color-dark);
+}
+
+/* MY PROJECTS */
+/*  */
+.my-projects {
+    font-size: 2rem;
+    cursor: auto;
+    padding-bottom: 0.5rem;
+}
+
+.add-project {
+    padding-left: 2.5rem;
+}
+
+.project-container {
+    width: 100%;
+}
+
+.project-input-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.project-inputbox {
+    padding: 0.75rem;
+    border-radius: 1rem;
+    outline: none;
+    font-size: 1.5rem;
+    font-weight: 500;
+    padding-left: 1rem;
+}
+
+.project-btn-container {
+    display: flex;
+}
+
+.add-project-btn,
+.cancel-project-btn {
+    width: 50%;
+    border-radius: 1rem;
+    padding: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.add-project-btn {
+    background-color: var(--main-color-medium);
+}
+
+.cancel-project-btn {
+    background-color: rgb(201, 31, 31);
+}
+
+.add-project-btn:hover {
+    background-color: #3da56c;
+}
+
+.cancel-project-btn:hover {
+    background-color: rgba(250, 19, 19, 0.6);
+}
+
+.project {
+    padding: 1rem;
+    cursor: pointer;
+    display: flex;
+    gap: 1rem;
+    font-size: 1.6rem;
+    align-items: center;
+    padding-left: 3rem;
+}
+
+.project svg {
+    width: 2.5rem;
+}
+
+.project:hover {
+    background-color: #0e4f91;
+}
+
+.project:hover .remove-project {
+    visibility: visible;
+}
+
+.project-container-right {
+    display: flex;
+    justify-content: space-between;
+    flex: 6;
+    align-items: center;
+}
+
+.remove-project {
+    width: 2.5rem;
+    background-color: inherit;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: inherit;
+    visibility: hidden;
 }
 
 svg {
@@ -142,6 +244,8 @@ svg {
     grid-column: 1/-1;
     align-self: center;
     padding-bottom: 1rem;
+    width: 40%;
+    padding-left: 1rem;
 }
 
 /* INBOX */
@@ -153,6 +257,7 @@ svg {
     min-width: 30rem;
     flex-direction: column;
     width: 40%;
+    padding-left: 0;
 }
 
 .content-inbox button {
@@ -173,6 +278,7 @@ svg {
     text-align: left;
     padding: 1.5rem 1rem;
     font-size: 1.7rem;
+    padding-left: 1rem;
 }
 
 .content-inbox .add-task-btn:hover {
@@ -206,6 +312,7 @@ svg {
     width: 100%;
     display: flex;
     flex-direction: column;
+    padding-left: 1rem;
 }
 
 .input-container {
@@ -311,10 +418,11 @@ footer p {
     color: #fff;
     text-decoration: none;
     margin-left: 0.5rem;
+    display: inline-block;
 }
 
 .github-link:active,
 .github-link:hover {
     color: #eee;
-    transform: rotate(20deg);
+    transform: rotate(5deg);
 }
