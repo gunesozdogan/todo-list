@@ -1,5 +1,6 @@
 export default loadInboxPage;
 
+import { minutesInHour } from 'date-fns/esm/fp';
 import UI from './UI';
 
 const inbox = document.querySelector('.inbox');
@@ -17,4 +18,5 @@ function loadInboxPage() {
 
     myUI.createAddTaskButton(content);
     mainContent.append(h2, content);
+    myUI.displayTasks(content);
 }

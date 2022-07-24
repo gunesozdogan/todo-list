@@ -1,27 +1,58 @@
+import { Project } from '../todo';
 import UI from './UI';
 
 (function () {
     const myUI = UI;
-    const allProjects = [];
+
+    function loadProjectPage() {
+        const mainContent = document.querySelector('.main-content');
+        const currentProjectIndex = this.className.split('-')[1];
+        const content = myUI.createElement(
+            ...[
+                'div',
+                [`content-project-${currentProjectIndex}`, `content-project`],
+                ,
+                ,
+                ,
+            ]
+        );
+        myUI.removeAllChildNodes(mainContent);
+
+        // LOADS SELECTED PROJECT PAGE
+        const h2 = myUI.createElement(
+            ...[
+                'h2',
+                ,
+                ['textContent'],
+                [`${myUI.allProjects[currentProjectIndex].title}`],
+            ]
+        );
+
+        myUI.createAddTaskButton(content);
+        mainContent.append(h2, content);
+        myUI.displayTasks(content);
+    }
 
     function displayProjects() {
         const projectContainer = document.querySelector('.project-container');
         createProject();
 
-        for (let i = 0; i < allProjects.length; i++) {
+        for (let i = 1; i < myUI.allProjects.length; i++) {
             const container = myUI.createElement(
                 'div',
                 ['project', `project-${i}`],
                 ['innerHTML'],
                 [
                     '<svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m3.3 15.4c.717 0 1.3.583 1.3 1.3s-.583 1.3-1.3 1.3-1.3-.583-1.3-1.3.583-1.3 1.3-1.3zm2.7 1.85c0-.414.336-.75.75-.75h14.5c.414 0 .75.336.75.75s-.336.75-.75.75h-14.5c-.414 0-.75-.336-.75-.75zm-2.7-6.55c.717 0 1.3.583 1.3 1.3s-.583 1.3-1.3 1.3-1.3-.583-1.3-1.3.583-1.3 1.3-1.3zm2.7 1.3c0-.414.336-.75.75-.75h14.5c.414 0 .75.336.75.75s-.336.75-.75.75h-14.5c-.414 0-.75-.336-.75-.75zm-2.7-6c.717 0 1.3.583 1.3 1.3s-.583 1.3-1.3 1.3-1.3-.583-1.3-1.3.583-1.3 1.3-1.3zm2.7.75c0-.414.336-.75.75-.75h14.5c.414 0 .75.336.75.75s-.336.75-.75.75h-14.5c-.414 0-.75-.336-.75-.75z" fill-rule="nonzero"/></svg>',
-                ]
+                ],
+                loadProjectPage
             );
+
             const title = myUI.createElement(
                 'p',
                 ['project-title', `project-title-${i}`],
                 ['textContent'],
-                [`${allProjects[i]}`]
+                [`${myUI.allProjects[i].title}`]
             );
             const removeProjectBtn = myUI.createElement(
                 'button',
@@ -46,7 +77,7 @@ import UI from './UI';
 
     function createProject() {
         const title = document.querySelector('.project-inputbox').value;
-        allProjects.push(title);
+        myUI.allProjects.push(Project(title, []));
     }
 
     function removeProjectInputForm() {
@@ -68,10 +99,20 @@ import UI from './UI';
         projectContainer.appendChild(addBtn);
     }
 
-    function removeProject() {
+    function getProjectIndex(element) {
+        const index = element
+            .closest('.project')
+            .className.split(' ')[1]
+            .split('-')[1];
+        return index;
+    }
+
+    function removeProject(e) {
+        e.stopPropagation();
         const project = this.closest('.project');
-        const projectIndex = project.className.split('-')[1];
-        allProjects.splice(projectIndex);
+        const index = getProjectIndex(this);
+
+        myUI.allProjects.splice(index, 1);
         project.remove();
     }
 

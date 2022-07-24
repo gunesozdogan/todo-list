@@ -1,8 +1,9 @@
-import Task from '../todo';
-import { compareAsc } from 'date-fns';
+import { Task } from '../todo';
+import { compareAsc, isThisISOWeek, format } from 'date-fns';
+import { Project } from '../todo';
 
 const UI = (function UI() {
-    const allTasks = [];
+    const allProjects = [Project('Inbox', [])];
 
     function removeAllChildNodes(parent) {
         while (parent.firstChild) {
@@ -51,9 +52,10 @@ const UI = (function UI() {
         const datePicker = createElement(
             'input',
             ['date-picker'],
-            ['type'],
-            ['date']
+            ['type', 'valueAsDate'],
+            ['date', new Date()]
         );
+
         const inputContainer = createElement('div', ['input-container']);
         const btns = createElement('div', ['btn-container']);
         const addBtn = createElement(
@@ -79,24 +81,50 @@ const UI = (function UI() {
     }
 
     function createTask() {
+        const parentNodeName = this.closest('form').parentNode;
         const title = document.querySelector('.task-inputbox').value;
         const date = document.querySelector('.date-picker').value;
-        const newTask = Task(title, date);
-        allTasks.push(newTask);
+        const newTask = Task(title, date, parentNodeName);
 
+        let index;
+        if (parentNodeName.className.includes('project')) {
+            index = parentNodeName.className.split(' ')[0].split('-')[2];
+        } else {
+            index = 0;
+        }
+
+        // PUSHING TASK TO RELATED PROJECT OBJECT'S TASKS ARRAY
+        allProjects[index].tasks.push(newTask);
         removeTaskPopUp();
-        displayTasks();
+        displayTasks(parentNodeName);
         return newTask;
     }
 
     function cancelCreatingTask() {
+        const parent = this.closest('form').parentNode;
         removeTaskPopUp();
-        displayTasks();
+        displayTasks(parent);
+    }
+
+    function getTaskIndex(element) {
+        const taskIndex = element.className.split(' ')[0].split('-')[3];
+        let projectIndex;
+
+        if (element.closest('.content-project')) {
+            projectIndex = element
+                .closest('.content-project')
+                .className.split(' ')[0]
+                .split('-')[2];
+        } else {
+            projectIndex = 0;
+        }
+        return [projectIndex, taskIndex];
     }
 
     function deleteTask() {
-        const index = Number(this.className[0].split('-')[3]);
-        allTasks.splice(index);
+        const [projectIndex, taskIndex] = getTaskIndex(this);
+        const curProject = allProjects[projectIndex];
+        curProject.removeTask(taskIndex);
         this.parentNode.parentNode.remove();
     }
 
@@ -120,15 +148,24 @@ const UI = (function UI() {
     }
 
     // RENDERS ALL TASKS
-    function displayTasks() {
-        const inboxContent = document.querySelector('.content-inbox');
-        removeAllChildNodes(inboxContent);
+    function displayTasks(parent) {
+        const content = parent;
+        removeAllChildNodes(content);
 
-        allTasks.sort((a, b) =>
+        let index;
+
+        if (parent.className.includes('project')) {
+            index = parent.className.split(' ')[0].split('-')[2];
+        } else {
+            index = 0;
+        }
+        const curTask = allProjects[index].tasks;
+
+        curTask.sort((a, b) =>
             compareAsc(new Date(a.dueDate), new Date(b.dueDate))
         );
 
-        for (let i = 0; i < allTasks.length; i++) {
+        for (let i = 0; i < curTask.length; i++) {
             const container = createElement('div', ['task-container']);
             const leftSide = createElement('div', ['container-left']);
             const btn = createElement(
@@ -142,27 +179,28 @@ const UI = (function UI() {
                 'p',
                 ['task-title'],
                 ['textContent'],
-                [`${allTasks[i].title}`]
+                [`${curTask[i].title}`]
             );
             const date = createElement(
                 'p',
                 ['task-date'],
                 ['textContent'],
-                [`${allTasks[i].dueDate}`]
+                [`${curTask[i].dueDate}`]
             );
 
             leftSide.append(btn, title);
             container.append(leftSide, date);
-            inboxContent.appendChild(container);
+            content.appendChild(container);
         }
-        createAddTaskButton(inboxContent);
+        createAddTaskButton(content);
     }
 
     return {
         removeAllChildNodes,
         createAddTaskButton,
         createElement,
-        allTasks,
+        allProjects,
+        displayTasks,
     };
 })();
 

@@ -248,9 +248,10 @@ svg {
     padding-left: 1rem;
 }
 
-/* INBOX */
+/* INBOX AND PROJECT PAGE*/
 /*  */
-.content-inbox {
+.content-inbox,
+.content-project {
     display: flex;
     justify-content: center;
     align-self: center;
@@ -260,7 +261,8 @@ svg {
     padding-left: 0;
 }
 
-.content-inbox button {
+.content-inbox button,
+.content-project button {
     border: none;
     background-color: var(--main-color-light);
     cursor: pointer;
@@ -273,7 +275,8 @@ svg {
     font-weight: 700;
 }
 
-.content-inbox .add-task-btn {
+.content-inbox .add-task-btn,
+.content-project .add-task-btn {
     width: 100%;
     text-align: left;
     padding: 1.5rem 1rem;
@@ -281,32 +284,39 @@ svg {
     padding-left: 1rem;
 }
 
-.content-inbox .add-task-btn:hover {
+.content-inbox .add-task-btn:hover,
+.content-project .add-task-btn:hover {
     background-color: var(--hover-color-light);
     border-radius: 2rem;
 }
 
-.content-inbox .add-btn {
+.content-inbox .add-btn,
+.content-project .add-btn {
     background-color: var(--main-color-medium);
     margin-right: 1rem;
     border-radius: 1rem;
     border: 1px solid #00000059;
 }
 
-.content-inbox .cancel-btn {
+.content-inbox .cancel-btn,
+.content-project .cancel-btn {
     background-color: rgba(250, 19, 19, 0.6);
     border-radius: 1rem;
     border: 1px solid #00000059;
 }
 
-.content-inbox .add-btn:hover {
+.content-inbox .add-btn:hover,
+.content-project .add-btn:hover {
     background-color: var(--main-color-dark);
 }
 
-.content-inbox .cancel-btn:hover {
+.content-inbox .cancel-btn:hover,
+.content-project .cancel-btn:hover {
     background-color: red;
 }
 
+/* TASK FORM */
+/*  */
 .task-input-form {
     margin-top: 1rem;
     width: 100%;
