@@ -1,6 +1,7 @@
 export default loadThisWeekPage;
 
 import UI from './UI';
+import { getTasks } from '../todo';
 
 const thisWeek = document.querySelector('.this-week');
 thisWeek.addEventListener('click', loadThisWeekPage);
@@ -11,7 +12,10 @@ function loadThisWeekPage() {
     const mainContent = document.querySelector('.main-content');
     myUI.removeAllChildNodes(mainContent);
 
-    // LOADS TODAY PAGE
+    // LOADS THIS WEEKS PAGE
     const h2 = myUI.createElement(...['h2', , ['textContent'], ['This Week']]);
-    mainContent.appendChild(h2);
+    const content = myUI.createElement(...['div', ['content-thisWeek']]);
+
+    myUI.displayTasksTodayThisWeek('thisWeek', content);
+    mainContent.append(h2, content);
 }

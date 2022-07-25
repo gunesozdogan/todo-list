@@ -13,10 +13,10 @@ function loadInboxPage() {
     myUI.removeAllChildNodes(mainContent);
 
     //LOADS INBOX PAGE
-    const content = myUI.createElement(...['div', ['content-inbox'], , , ,]);
+    const content = myUI.createElement(...['div', ['content-inbox']]);
     const h2 = myUI.createElement(...['h2', , ['textContent'], ['Inbox']]);
 
-    myUI.createAddTaskButton(content);
     mainContent.append(h2, content);
     myUI.displayTasks(content);
+    myUI.createAddTaskButton(content);
 }

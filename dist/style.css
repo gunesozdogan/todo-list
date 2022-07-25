@@ -241,17 +241,26 @@ svg {
     color: var(--sec-color);
     font-size: 3.5rem;
     font-weight: 600;
-    grid-column: 1/-1;
     align-self: center;
     padding-bottom: 1rem;
     width: 40%;
-    padding-left: 1rem;
+    padding-left: 1.5rem;
+}
+
+h3 {
+    padding-left: 4.5rem;
+    font-size: 2rem;
+    color: var(--sec-color);
+    padding-bottom: 0.5rem;
+    text-decoration: underline;
 }
 
 /* INBOX AND PROJECT PAGE*/
 /*  */
 .content-inbox,
-.content-project {
+.content-project,
+.content-today,
+.content-thisWeek {
     display: flex;
     justify-content: center;
     align-self: center;
@@ -262,7 +271,9 @@ svg {
 }
 
 .content-inbox button,
-.content-project button {
+.content-project button,
+.content-today button,
+.content-thisWeek button {
     border: none;
     background-color: var(--main-color-light);
     cursor: pointer;
@@ -276,7 +287,9 @@ svg {
 }
 
 .content-inbox .add-task-btn,
-.content-project .add-task-btn {
+.content-project .add-task-btn,
+.content-today .add-task-btn,
+.content-thisWeek .add-task-btn {
     width: 100%;
     text-align: left;
     padding: 1.5rem 1rem;
@@ -285,13 +298,17 @@ svg {
 }
 
 .content-inbox .add-task-btn:hover,
-.content-project .add-task-btn:hover {
+.content-project .add-task-btn:hover,
+.content-today .add-task-btn:hover,
+.content-thisWeek .add-task-btn:hover {
     background-color: var(--hover-color-light);
     border-radius: 2rem;
 }
 
 .content-inbox .add-btn,
-.content-project .add-btn {
+.content-project .add-btn,
+.content-today .add-btn,
+.content-thisWeek .add-btn {
     background-color: var(--main-color-medium);
     margin-right: 1rem;
     border-radius: 1rem;
@@ -299,22 +316,32 @@ svg {
 }
 
 .content-inbox .cancel-btn,
-.content-project .cancel-btn {
+.content-project .cancel-btn,
+.content-today .cancel-btn,
+.content-thisWeek .cancel-btn {
     background-color: rgba(250, 19, 19, 0.6);
     border-radius: 1rem;
     border: 1px solid #00000059;
 }
 
 .content-inbox .add-btn:hover,
-.content-project .add-btn:hover {
+.content-project .add-btn:hover,
+.content-today .add-btn:hover,
+.content-thisWeek .add-btn:hover {
     background-color: var(--main-color-dark);
 }
 
 .content-inbox .cancel-btn:hover,
-.content-project .cancel-btn:hover {
+.content-project .cancel-btn:hover,
+.content-today .cancel-btn:hover,
+.content-thisWeek .cancel-btn:hover {
     background-color: red;
 }
 
+.content-today .task-delete-btn,
+.content-thisWeek .task-delete-btn {
+    visibility: hidden;
+}
 /* TASK FORM */
 /*  */
 .task-input-form {

@@ -1,10 +1,9 @@
-import { Task } from '../todo';
+import { getTasks, Task } from '../todo';
 import { compareAsc, isThisISOWeek, format } from 'date-fns';
 import { Project } from '../todo';
+import { allProjects } from '../todo';
 
 const UI = (function UI() {
-    const allProjects = [Project('Inbox', [])];
-
     function removeAllChildNodes(parent) {
         while (parent.firstChild) {
             parent.removeChild(parent.firstChild);
@@ -85,18 +84,13 @@ const UI = (function UI() {
         const title = document.querySelector('.task-inputbox').value;
         const date = document.querySelector('.date-picker').value;
         const newTask = Task(title, date, parentNodeName);
-
-        let index;
-        if (parentNodeName.className.includes('project')) {
-            index = parentNodeName.className.split(' ')[0].split('-')[2];
-        } else {
-            index = 0;
-        }
+        const [projectIndex, taskIndex] = getTaskIndex(this);
 
         // PUSHING TASK TO RELATED PROJECT OBJECT'S TASKS ARRAY
-        allProjects[index].tasks.push(newTask);
+        allProjects[projectIndex].tasks.push(newTask);
         removeTaskPopUp();
         displayTasks(parentNodeName);
+        createAddTaskButton(parentNodeName);
         return newTask;
     }
 
@@ -104,6 +98,7 @@ const UI = (function UI() {
         const parent = this.closest('form').parentNode;
         removeTaskPopUp();
         displayTasks(parent);
+        createAddTaskButton(parent);
     }
 
     function getTaskIndex(element) {
@@ -121,9 +116,10 @@ const UI = (function UI() {
         return [projectIndex, taskIndex];
     }
 
-    function deleteTask() {
+    function removeTask() {
         const [projectIndex, taskIndex] = getTaskIndex(this);
         const curProject = allProjects[projectIndex];
+
         curProject.removeTask(taskIndex);
         this.parentNode.parentNode.remove();
     }
@@ -147,19 +143,48 @@ const UI = (function UI() {
         }
     }
 
-    // RENDERS ALL TASKS
-    function displayTasks(parent) {
+    // DISPLAYS TASKS FOR TODAY AND THIS WEEK PAGES
+    function displayTasksTodayThisWeek(period, parent) {
+        const content = parent;
+        const time1 = new Date().setDate(0, 0, 0, 0);
+        let time2;
+        if (period === 'thisWeek') {
+            time2 = new Date();
+            time2.setDate(time2.getDate() + 7);
+            time2.setHours(23, 59, 59, 999);
+        } else {
+            time2 = new Date().setHours(23, 59, 59, 999);
+        }
+
+        const arr = Object.entries(getTasks(time1, time2));
+
+        for (let projectInd = 0; projectInd < arr.length; projectInd++) {
+            if (arr[projectInd][1].length === 0) {
+                continue;
+            }
+            const div = createElement('div');
+            const h3 = createElement(
+                ...['h3', , ['textContent'], [`${arr[projectInd][0]}`]]
+            );
+
+            const curArr = arr[projectInd][1];
+            displayTasks(div, curArr);
+            content.append(h3, div);
+        }
+    }
+
+    // RENDERS ALL TASKS ON INBOX AND PROJECTS PAGES
+    function displayTasks(parent, arr) {
         const content = parent;
         removeAllChildNodes(content);
 
-        let index;
-
-        if (parent.className.includes('project')) {
-            index = parent.className.split(' ')[0].split('-')[2];
+        let curTask;
+        if (arr) {
+            curTask = arr;
         } else {
-            index = 0;
+            const [projectIndex, taskIndex] = getTaskIndex(parent);
+            curTask = allProjects[projectIndex].tasks;
         }
-        const curTask = allProjects[index].tasks;
 
         curTask.sort((a, b) =>
             compareAsc(new Date(a.dueDate), new Date(b.dueDate))
@@ -173,7 +198,7 @@ const UI = (function UI() {
                 [`task-delete-btn-${i}`, 'task-delete-btn'],
                 [],
                 [],
-                deleteTask
+                removeTask
             );
             const title = createElement(
                 'p',
@@ -192,15 +217,14 @@ const UI = (function UI() {
             container.append(leftSide, date);
             content.appendChild(container);
         }
-        createAddTaskButton(content);
     }
 
     return {
         removeAllChildNodes,
         createAddTaskButton,
         createElement,
-        allProjects,
         displayTasks,
+        displayTasksTodayThisWeek,
     };
 })();
 

@@ -1,5 +1,6 @@
-import { Project } from '../todo';
+import { allProjects, Project } from '../todo';
 import UI from './UI';
+import loadInboxPage from './inboxPage';
 
 (function () {
     const myUI = UI;
@@ -7,37 +8,32 @@ import UI from './UI';
     function loadProjectPage() {
         const mainContent = document.querySelector('.main-content');
         const currentProjectIndex = this.className.split('-')[1];
-        const content = myUI.createElement(
-            ...[
-                'div',
-                [`content-project-${currentProjectIndex}`, `content-project`],
-                ,
-                ,
-                ,
-            ]
-        );
+        const projectContainer = document.querySelector('.project-container');
+        const content = myUI.createElement('div', [
+            `content-project-${currentProjectIndex}`,
+            `content-project`,
+        ]);
         myUI.removeAllChildNodes(mainContent);
 
         // LOADS SELECTED PROJECT PAGE
         const h2 = myUI.createElement(
-            ...[
-                'h2',
-                ,
-                ['textContent'],
-                [`${myUI.allProjects[currentProjectIndex].title}`],
-            ]
+            'h2',
+            [],
+            ['textContent'],
+            [`${allProjects[currentProjectIndex].title}`]
         );
 
         myUI.createAddTaskButton(content);
         mainContent.append(h2, content);
         myUI.displayTasks(content);
+        myUI.createAddTaskButton(content);
     }
 
     function displayProjects() {
         const projectContainer = document.querySelector('.project-container');
-        createProject();
+        // createProject();
 
-        for (let i = 1; i < myUI.allProjects.length; i++) {
+        for (let i = 1; i < allProjects.length; i++) {
             const container = myUI.createElement(
                 'div',
                 ['project', `project-${i}`],
@@ -52,7 +48,7 @@ import UI from './UI';
                 'p',
                 ['project-title', `project-title-${i}`],
                 ['textContent'],
-                [`${myUI.allProjects[i].title}`]
+                [`${allProjects[i].title}`]
             );
             const removeProjectBtn = myUI.createElement(
                 'button',
@@ -77,12 +73,16 @@ import UI from './UI';
 
     function createProject() {
         const title = document.querySelector('.project-inputbox').value;
-        myUI.allProjects.push(Project(title, []));
+        allProjects.push(Project(title, []));
+
+        displayProjects();
     }
 
     function removeProjectInputForm() {
         const projectInputForm = document.querySelector('.project-input-form');
-        projectInputForm.remove();
+        if (projectInputForm) {
+            projectInputForm.remove();
+        }
         createAddProjectButton();
     }
 
@@ -112,8 +112,12 @@ import UI from './UI';
         const project = this.closest('.project');
         const index = getProjectIndex(this);
 
-        myUI.allProjects.splice(index, 1);
+        allProjects.splice(index, 1);
         project.remove();
+        loadInboxPage();
+        const projectContainer = document.querySelector('.project-container');
+        myUI.removeAllChildNodes(projectContainer);
+        displayProjects();
     }
 
     function displayProjectPopUp() {
@@ -128,7 +132,7 @@ import UI from './UI';
             ['add-project-btn'],
             ['textContent', 'type'],
             ['Add', 'button'],
-            displayProjects
+            createProject
         );
         const cancelBtn = myUI.createElement(
             'button',
