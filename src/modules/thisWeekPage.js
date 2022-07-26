@@ -1,7 +1,6 @@
 export default loadThisWeekPage;
 
 import UI from './UI';
-import { getTasks } from '../todo';
 
 const thisWeek = document.querySelector('.this-week');
 thisWeek.addEventListener('click', loadThisWeekPage);

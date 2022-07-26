@@ -19,7 +19,7 @@ COLORS FROM DARK TO LIGHT
 * {
     margin: 0;
     padding: 0;
-    font-family: 'Open sans', sans-serif;
+    font-family: 'Roboto', sans-serif;
     box-sizing: border-box;
     user-select: none;
     -webkit-touch-callout: none;
@@ -33,6 +33,10 @@ body {
     position: relative;
     min-height: 100vh;
     width: 100vw;
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 /* HEADER */
@@ -61,7 +65,7 @@ h1 {
 /*  */
 main {
     display: flex;
-    height: calc(100vh - 12vh);
+    flex: 1;
 }
 
 .sidebar {
@@ -81,6 +85,7 @@ main {
     justify-items: center;
     padding: 2rem;
     flex: 1;
+    max-height: 22vh;
 }
 
 .upper-side-btn,
@@ -235,6 +240,10 @@ svg {
     padding: 2rem;
     flex: 1;
     margin: 0 auto;
+    padding-bottom: 5rem;
+    overflow: hidden;
+    position: relative;
+    z-index: 5000;
 }
 
 .main-content h2 {
@@ -364,7 +373,7 @@ h3 {
     font-size: 1.5rem;
     outline: none;
     border: 2px solid #0000008f;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Roboto', sans-serif;
     color: rgb(85, 85, 85);
     font-weight: 500;
 }
@@ -410,33 +419,171 @@ h3 {
     align-items: center;
 }
 
-.task-title,
-.task-date {
-    font-size: 1.7rem;
-    font-weight: 500;
-    color: var(--sec-color);
+.container-right {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
 }
 
-.task-container button {
+.task-title,
+.task-date {
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.container-left button {
     border: 2px solid var(--sec-color);
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2.2rem;
+    height: 2.2rem;
     border-radius: 50%;
     margin-top: 0;
 }
 
-.task-container button:hover {
+.container-right button {
+    width: 8rem;
+    height: 2.5rem;
+    border-radius: 1rem;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    visibility: hidden;
+    background-color: inherit;
+    font-weight: 500;
+    padding: 1rem 2rem;
+}
+
+.task-container:hover .container-right button {
+    visibility: visible;
+}
+
+.container-left button:hover {
     background-color: var(--sec-color);
+    color: var(--main-color-light);
+}
+
+.container-right button:hover {
+    background-color: var(--sec-color);
+    color: var(--main-color-light);
+}
+
+/* EDIT FORM */
+/*  */
+
+.overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 8000;
+}
+
+.overlay ~ .main-content,
+.overlay ~ .sidebar {
+    filter: blur(8px);
+}
+
+.edit-form {
+    position: absolute;
+    top: 50%;
+    left: 45%;
+    transform: translate(-24%, -150%);
+    display: flex;
+    flex-direction: column;
+    height: 30%;
+    width: 30%;
+    padding: 2rem;
+    border-radius: 1rem;
+    align-items: stretch;
+    background-color: var(--main-color-light);
+    border: 0.5px solid rgb(94, 93, 93);
+    min-width: 40rem;
+    min-height: 30rem;
+    z-index: 8000;
+    gap: 1rem;
+    box-shadow: 5px 4px 35px 2px #000;
+}
+
+.edit-date-container,
+.edit-title-container,
+.edit-project-container {
+    width: 100%;
+    display: flex;
+    align-items: left;
+    justify-content: space-between;
+    height: 30%;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.edit-title-input,
+.edit-date-input,
+.edit-project-input,
+.edit-project-dropdown {
+    flex: 3;
+    padding: 0.6rem;
+    padding-left: 1rem;
+    font-family: sans-serif;
+    font-size: 1.5rem;
+    outline: none;
+    border: 1px solid #000;
+    font-family: 'Roboto', sans-serif;
+    color: #000;
+    font-weight: 500;
+    border-radius: 1rem;
+    background-color: #fff;
+}
+
+.edit-title-label,
+.edit-date-label,
+.edit-project-label {
+    flex: 2;
+    font-size: 1.6rem;
+    color: var(--sec-color);
+    font-weight: 600;
+}
+
+.edit-btn-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    width: 100%;
+    align-self: center;
+    margin-top: 1rem;
+}
+
+.edit-cancel-btn,
+.edit-change-btn {
+    padding: 0.75rem 1rem;
+    width: 8rem;
+    border: 1px solid #000;
+    border: none;
+    background-color: inherit;
+    font-size: 1.5rem;
+    border-radius: 1rem;
+    cursor: pointer;
+}
+
+.edit-change-btn {
+    background-color: rgb(16, 99, 16);
+    color: #fff;
+}
+
+.edit-cancel-btn {
+    background-color: red;
+    color: #fff;
 }
 
 /* FOOTER */
 /*  */
 footer {
-    margin-top: auto;
     background-color: rgba(0, 0, 0, 0.6);
-    height: 4%;
+    height: 3rem;
     width: 100%;
-    position: fixed;
+    position: absolute;
     bottom: 0;
     left: 0;
     display: flex;

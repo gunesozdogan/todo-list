@@ -1,7 +1,5 @@
-import { getTasks, Task } from '../todo';
-import { compareAsc, isThisISOWeek, format } from 'date-fns';
-import { Project } from '../todo';
-import { allProjects } from '../todo';
+import { getTasks, Task, allProjects } from '../index';
+import { compareAsc, format } from 'date-fns';
 
 const UI = (function UI() {
     function removeAllChildNodes(parent) {
@@ -83,8 +81,8 @@ const UI = (function UI() {
         const parentNodeName = this.closest('form').parentNode;
         const title = document.querySelector('.task-inputbox').value;
         const date = document.querySelector('.date-picker').value;
-        const newTask = Task(title, date, parentNodeName);
         const [projectIndex, taskIndex] = getTaskIndex(this);
+        const newTask = Task(title, date, allProjects[projectIndex]);
 
         // PUSHING TASK TO RELATED PROJECT OBJECT'S TASKS ARRAY
         allProjects[projectIndex].tasks.push(newTask);
@@ -173,16 +171,131 @@ const UI = (function UI() {
         }
     }
 
+    function cancelEdit() {
+        document.querySelector('.overlay').remove();
+    }
+
+    function acceptEdit() {
+        const title = document.querySelector('.edit-title-input').value;
+        const date = document.querySelector('.edit-date-input').value;
+        const projectTitle = document.querySelector(
+            '.edit-project-dropdown'
+        ).value;
+        const [projectInd, taskInd] = getTaskIndex(this);
+        const task = allProjects[projectInd].tasks[taskInd];
+        document.querySelector('.overlay').remove();
+
+        task.setTitle(title);
+        task.setDueDate(date);
+
+        const newProject = allProjects.find((el) => el.title === projectTitle);
+        const oldProject = task.parent;
+
+        if (oldProject !== newProject) {
+            task.setParent(newProject);
+            oldProject.removeTask(taskInd);
+            newProject.tasks.push(task);
+        }
+
+        const project = document.querySelector(oldProject.elementClassName);
+        displayTasks(project, oldProject.tasks);
+        createAddTaskButton(project);
+    }
+
+    function editTask() {
+        const [projectInd, taskInd] = getTaskIndex(this);
+        const task = allProjects[projectInd].tasks[taskInd];
+        const sidebar = document.querySelector('.sidebar');
+        const main = document.querySelector('main');
+        const overlay = createElement('div', ['overlay']);
+        const changeBtn = createElement(
+            'button',
+            ['edit-change-btn'],
+            ['textContent', 'type'],
+            ['Save', 'button'],
+            acceptEdit.bind(this)
+        );
+        const cancelBtn = createElement(
+            'button',
+            ['edit-cancel-btn'],
+            ['textContent', 'type'],
+            ['Cancel', 'button'],
+            cancelEdit
+        );
+        const btnContaniner = createElement('div', ['edit-btn-container']);
+        const form = createElement('div', ['edit-form'], ['method'], ['post']);
+        const divName = createElement('div', ['edit-title-container']);
+        const inputName = createElement(
+            'input',
+            ['edit-title-input'],
+            ['id', 'value'],
+            ['taskTitle', task.title]
+        );
+        const labelName = createElement(
+            'label',
+            ['edit-title-label'],
+            ['for', 'textContent'],
+            ['taskTitle', 'Task Title *']
+        );
+        const divDate = createElement('div', ['edit-date-container']);
+        const inputDate = createElement(
+            'input',
+            ['edit-date-input'],
+            ['id', 'value', 'type'],
+            ['taskDate', format(new Date(task.dueDate), 'yyyy-MM-dd'), 'date']
+        );
+        const labelDate = createElement(
+            'label',
+            ['edit-date-label'],
+            ['for', 'textContent'],
+            ['taskDate', 'Task Due Date *']
+        );
+        const divProject = createElement('div', ['edit-project-container']);
+
+        const labelProject = createElement(
+            'label',
+            ['edit-project-label'],
+            ['for', 'textContent'],
+            ['taskProject', 'Task Project *']
+        );
+
+        const select = createElement(
+            'select',
+            ['edit-project-dropdown'],
+            ['name'],
+            ['Projects']
+        );
+
+        for (let i = 0; i < allProjects.length; i++) {
+            if (i !== Number(projectInd)) {
+                const option = createElement(
+                    'option',
+                    [],
+                    ['value', 'textContent'],
+                    [allProjects[i].title, allProjects[i].title]
+                );
+                select.appendChild(option);
+            }
+        }
+        divName.append(labelName, inputName);
+        divDate.append(labelDate, inputDate);
+        divProject.append(labelProject, select);
+        btnContaniner.append(changeBtn, cancelBtn);
+        form.append(divName, divDate, divProject, btnContaniner);
+        overlay.appendChild(form);
+        main.insertBefore(overlay, sidebar);
+    }
     // RENDERS ALL TASKS ON INBOX AND PROJECTS PAGES
     function displayTasks(parent, arr) {
         const content = parent;
         removeAllChildNodes(content);
 
+        let projectIndex, taskIndex;
         let curTask;
         if (arr) {
             curTask = arr;
         } else {
-            const [projectIndex, taskIndex] = getTaskIndex(parent);
+            [projectIndex, taskIndex] = getTaskIndex(content);
             curTask = allProjects[projectIndex].tasks;
         }
 
@@ -193,12 +306,20 @@ const UI = (function UI() {
         for (let i = 0; i < curTask.length; i++) {
             const container = createElement('div', ['task-container']);
             const leftSide = createElement('div', ['container-left']);
+            const rightSide = createElement('div', ['container-right']);
             const btn = createElement(
                 'button',
                 [`task-delete-btn-${i}`, 'task-delete-btn'],
                 [],
                 [],
                 removeTask
+            );
+            const editBtn = createElement(
+                'button',
+                [`task-edit-btn-${i}`, 'task-edit-btn'],
+                ['textContent'],
+                ['Edit'],
+                editTask
             );
             const title = createElement(
                 'p',
@@ -214,7 +335,8 @@ const UI = (function UI() {
             );
 
             leftSide.append(btn, title);
-            container.append(leftSide, date);
+            rightSide.append(editBtn, date);
+            container.append(leftSide, rightSide);
             content.appendChild(container);
         }
     }

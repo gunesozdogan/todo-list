@@ -1,4 +1,4 @@
-import { allProjects, Project } from '../todo';
+import { allProjects, Project } from '../index';
 import UI from './UI';
 import loadInboxPage from './inboxPage';
 
@@ -31,9 +31,11 @@ import loadInboxPage from './inboxPage';
 
     function displayProjects() {
         const projectContainer = document.querySelector('.project-container');
-        // createProject();
 
-        for (let i = 1; i < allProjects.length; i++) {
+        for (let i = 0; i < allProjects.length; i++) {
+            if (allProjects[i].title === 'Inbox') {
+                continue;
+            }
             const container = myUI.createElement(
                 'div',
                 ['project', `project-${i}`],
@@ -72,10 +74,18 @@ import loadInboxPage from './inboxPage';
     }
 
     function createProject() {
-        const title = document.querySelector('.project-inputbox').value;
+        const div = document.querySelector('.project-inputbox');
+        const title = div.value;
         allProjects.push(Project(title, []));
 
         displayProjects();
+        const projectIndex = document
+            .querySelector('.add-project')
+            .previousSibling.className.split(' ')[1]
+            .split('-')[1];
+        allProjects[
+            allProjects.length - 1
+        ].elementClassName = `.content-project-${projectIndex}`;
     }
 
     function removeProjectInputForm() {
@@ -149,6 +159,5 @@ import loadInboxPage from './inboxPage';
     }
 
     createAddProjectButton();
-
-    return { displayProjectPopUp };
+    return { displayProjects };
 })();

@@ -1,8 +1,6 @@
 export default loadTodayPage;
 
 import UI from './UI';
-import { getTasks } from '../todo';
-import { format } from 'date-fns/esm';
 
 const today = document.querySelector('.today');
 today.addEventListener('click', loadTodayPage);
