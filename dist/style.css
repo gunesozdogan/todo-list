@@ -590,6 +590,7 @@ footer {
     align-items: center;
     justify-content: center;
     gap: 2rem;
+    z-index: 8000;
 }
 
 footer p {

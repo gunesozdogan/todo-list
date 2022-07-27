@@ -2,7 +2,7 @@ import { allProjects, Project } from '../index';
 import UI from './UI';
 import loadInboxPage from './inboxPage';
 
-(function () {
+const myProjects = (function () {
     const myUI = UI;
 
     function loadProjectPage() {
@@ -31,7 +31,7 @@ import loadInboxPage from './inboxPage';
 
     function displayProjects() {
         const projectContainer = document.querySelector('.project-container');
-
+        myUI.removeAllChildNodes(projectContainer);
         for (let i = 0; i < allProjects.length; i++) {
             if (allProjects[i].title === 'Inbox') {
                 continue;
@@ -70,7 +70,7 @@ import loadInboxPage from './inboxPage';
             projectContainer.appendChild(container);
         }
 
-        removeProjectInputForm();
+        createAddProjectButton();
     }
 
     function createProject() {
@@ -86,6 +86,8 @@ import loadInboxPage from './inboxPage';
         allProjects[
             allProjects.length - 1
         ].elementClassName = `.content-project-${projectIndex}`;
+        myUI.saveToLocalStorage();
+        removeProjectInputForm();
     }
 
     function removeProjectInputForm() {
@@ -93,7 +95,7 @@ import loadInboxPage from './inboxPage';
         if (projectInputForm) {
             projectInputForm.remove();
         }
-        createAddProjectButton();
+        displayProjects();
     }
 
     function createAddProjectButton() {
@@ -128,6 +130,7 @@ import loadInboxPage from './inboxPage';
         const projectContainer = document.querySelector('.project-container');
         myUI.removeAllChildNodes(projectContainer);
         displayProjects();
+        myUI.saveToLocalStorage();
     }
 
     function displayProjectPopUp() {
@@ -158,6 +161,8 @@ import loadInboxPage from './inboxPage';
         projectContainer.appendChild(form);
     }
 
-    createAddProjectButton();
+    // createAddProjectButton();
     return { displayProjects };
 })();
+
+export default myProjects;

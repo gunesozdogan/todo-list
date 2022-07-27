@@ -4,30 +4,54 @@ import loadThisWeekPage from './modules/thisWeekPage';
 import displayProjectPopUp from './modules/myProjects';
 import { format, isBefore, isAfter } from 'date-fns';
 import UI from './modules/UI';
-
+import myProjects from './modules/myProjects';
 export { Task, Project, getTasks };
 
-const allProjects = [Project('Inbox', [], '.content-inbox')];
+const myUI = UI;
 
-function Task(title, dueDate, parent) {
+// INITIALIZE DATA WITH LOCAL STORAGE IF IT EXISTS
+let allProjects;
+if (myUI.storage) {
+    const serializedProjects = JSON.parse(myUI.storage);
+    allProjects = [];
+    for (let serializedProject of serializedProjects) {
+        const tasks = serializedProject.tasks.map((task) =>
+            Task(task.title, task.dueDate)
+        );
+        const project = Project(
+            serializedProject.title,
+            tasks,
+            serializedProject.elementClassName
+        );
+        allProjects.push(project);
+    }
+} else {
+    allProjects = [Project('Inbox', [], '.content-inbox')];
+}
+
+myProjects.displayProjects();
+loadInboxPage();
+
+function Task(title, dueDate) {
     function setTitle(title) {
         this.title = title;
     }
     function setDueDate(dueDate) {
         this.dueDate = format(new Date(dueDate), 'E-dd-MMM-yyyy');
     }
-    function setParent(parent) {
-        this.parent = parent;
-    }
+    // function setParent(parent) {
+    //     this.parent = parent;
+    // }
 
     dueDate = format(new Date(dueDate), 'E-dd-MMM-yyyy');
-    return { title, dueDate, parent, setTitle, setDueDate, setParent };
+    return { title, dueDate, setTitle, setDueDate };
 }
 
 function Project(title, tasks, elementClassName) {
     function removeTask(taskIndex) {
         this.tasks.splice(taskIndex, 1);
     }
+
     return {
         title,
         tasks,

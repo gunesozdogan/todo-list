@@ -2,6 +2,8 @@ import { getTasks, Task, allProjects } from '../index';
 import { compareAsc, format } from 'date-fns';
 
 const UI = (function UI() {
+    const storage = localStorage.getItem('allProjects');
+
     function removeAllChildNodes(parent) {
         while (parent.firstChild) {
             parent.removeChild(parent.firstChild);
@@ -89,7 +91,13 @@ const UI = (function UI() {
         removeTaskPopUp();
         displayTasks(parentNodeName);
         createAddTaskButton(parentNodeName);
+        saveToLocalStorage();
+
         return newTask;
+    }
+
+    function saveToLocalStorage() {
+        localStorage.setItem('allProjects', JSON.stringify(allProjects));
     }
 
     function cancelCreatingTask() {
@@ -117,9 +125,9 @@ const UI = (function UI() {
     function removeTask() {
         const [projectIndex, taskIndex] = getTaskIndex(this);
         const curProject = allProjects[projectIndex];
-
         curProject.removeTask(taskIndex);
         this.parentNode.parentNode.remove();
+        saveToLocalStorage();
     }
 
     // CREATES BUTTON FOR ADDING TASK
@@ -189,10 +197,9 @@ const UI = (function UI() {
         task.setDueDate(date);
 
         const newProject = allProjects.find((el) => el.title === projectTitle);
-        const oldProject = task.parent;
+        const oldProject = allProjects[projectInd];
 
         if (oldProject !== newProject) {
-            task.setParent(newProject);
             oldProject.removeTask(taskInd);
             newProject.tasks.push(task);
         }
@@ -200,6 +207,7 @@ const UI = (function UI() {
         const project = document.querySelector(oldProject.elementClassName);
         displayTasks(project, oldProject.tasks);
         createAddTaskButton(project);
+        saveToLocalStorage();
     }
 
     function editTask() {
@@ -347,6 +355,8 @@ const UI = (function UI() {
         createElement,
         displayTasks,
         displayTasksTodayThisWeek,
+        storage,
+        saveToLocalStorage,
     };
 })();
 
